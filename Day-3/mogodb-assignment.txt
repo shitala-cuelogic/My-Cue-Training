@@ -1,0 +1,146 @@
+//Connect to mongo shell
+it5@it5-desktop:~$ mongo
+MongoDB shell version: 2.2.3
+connecting to: test
+>
+
+// To check your databases list.
+> show dbs
+local   (empty)
+mysql   0.203125GB
+tandem  0.203125GB
+test    0.203125GB
+>
+
+//Create database/switch to another database
+> use tandem
+switched to db tandem
+
+//To check created collections of your database.
+
+> show collections
+AvatarFiles
+BrandUsers
+Brands
+CampaignFiles
+CampaignMessages
+CampaignTasks
+Campaigns
+Cities
+Countries
+CreatorUsers
+Creators
+InviteCodes
+Opportunities
+OpportunityMessages
+Payments
+States
+system.indexes
+>
+
+//Create new db
+> use testdb
+switched to db testdb
+
+//To check your currently selected database use the command db
+> db
+test
+
+//To get stats about mongodb server (gives stats of currently selected database).
+> db.stats()
+{
+    "db" : "test",
+    "collections" : 3,
+    "objects" : 5,
+    "avgObjSize" : 39.2,
+    "dataSize" : 196,
+    "storageSize" : 12288,
+    "numExtents" : 3,
+    "indexes" : 1,
+    "indexSize" : 8176,
+    "fileSize" : 201326592,
+    "nsSizeMB" : 16,
+    "ok" : 1
+}
+
+//This will delete the selected database.
+> db.dropDatabase()
+{ "dropped" : "testdb", "ok" : 1 }
+
+//This will create collection
+> db.createCollection("user");
+{ "ok" : 1 }
+
+//Drop collection
+> db.user.drop()
+true
+
+//Insert document
+> db.user.insert({firstName: "Shital", lastName: "Agarwal"})
+
+//This will display all the documents of specified collection
+> db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal" }
+
+//Find with specified property
+> db.user.find({"firstName" : "Shital"})
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal" }
+
+//Find with specified property and "And : ',' " condition
+> db.user.find({"firstName" : "Shital", "lastName" : "Agarwal"})
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal" }
+
+//Find with specified property and "or : '$or' " condition
+> db.user.find({$or: [{"firstName": "Jazz"}, {"firstName": "Shital"}]})
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital" }
+
+//Upate
+//Before update data is
+>db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital" }
+
+> db.user.update({},{$set:{'title': 'good'}})
+
+> db.user.find()
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital" }
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal", "title" : "good" }
+
+//update all
+> db.user.update({},{$set:{'title': 'good'}},{multi:true})
+> db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal", "title" : "good" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital", "title" : "good" }
+
+//Remove
+//Before remove data is
+> db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal", "title" : "good" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital", "title" : "good" }
+{ "_id" : ObjectId("56a2281daa6ab878a05fd849"), "firstName" : "pqr", "lastName" : "xyz" }
+
+//Remove specific data
+> db.user.remove({"firstName": "pqr"})
+> db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal", "title" : "good" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital", "title" : "good" }
+
+//Remove all data
+> db.user.find()
+{ "_id" : ObjectId("56a2190022b9944f63075eb7"), "firstName" : "Shital", "lastName" : "Agarwal", "title" : "good" }
+{ "_id" : ObjectId("56a21c3322b9944f63075eb8"), "firstName" : "Shital", "title" : "good" }
+> db.user.remove()
+
+//Sort ascending
+> db.user.find().sort({"firstName":1})
+{ "_id" : ObjectId("56a22a48aa6ab878a05fd84a"), "firstName" : "ABC" }
+{ "_id" : ObjectId("56a22a4caa6ab878a05fd84b"), "firstName" : "PQR" }
+{ "_id" : ObjectId("56a22a52aa6ab878a05fd84c"), "firstName" : "XYZ" }
+
+//Sort descending
+> db.user.find().sort({"firstName":-1})
+{ "_id" : ObjectId("56a22a52aa6ab878a05fd84c"), "firstName" : "XYZ" }
+{ "_id" : ObjectId("56a22a4caa6ab878a05fd84b"), "firstName" : "PQR" }
+{ "_id" : ObjectId("56a22a48aa6ab878a05fd84a"), "firstName" : "ABC" }
+
