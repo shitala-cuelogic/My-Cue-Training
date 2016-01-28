@@ -1,4 +1,6 @@
 var series = require("hapi-next"),
+    validator = require("./authorization.validator"),
+    controller = require("./authorization.controller"),
     joi = require("joi");
 
 module.exports = {
@@ -14,13 +16,15 @@ module.exports = {
                     lastName: joi.string().required(),
                     username: joi.string().email().required(),
                     password: joi.string().min(6).required()
-
                 }
             },
 
             handler: function(request, reply) {
 
-                var functionSeries = new series([]);
+                var functionSeries = new series([
+                    validator.checkUserExist,
+                    controller.userSignup,
+                ]);
 
                 functionSeries.execute(request, reply);
             }
@@ -34,7 +38,6 @@ module.exports = {
             description: "Create token to authenticate user and login user to the system",
             validate: {
                 payload: {
-                    userType: joi.number().valid(1,2).required(),
                     username: joi.string().email().required(),
                     password: joi.string().required()
                 }

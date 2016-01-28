@@ -22,7 +22,9 @@ var schema = {
     }
 }
 
-var mongooseSchema = new mongoose.Schema(schema);
+var mongooseSchema = new mongoose.Schema(schema, {
+    collection: "Users"
+});
 
 mongooseSchema.pre("save", function(next) {
 

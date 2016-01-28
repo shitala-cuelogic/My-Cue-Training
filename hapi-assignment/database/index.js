@@ -4,7 +4,7 @@ var promise = require("bluebird"),
     mongoose = promise.promisifyAll(require("mongoose")),
     requireDir = require("require-directory");
 
-//console.log(requireDir(module, './models'));
+requireDir(module, './models');
 
 mongoose.connect("mongodb://" + process.env.MONGODB_HOST + "/" + process.env.MONGODB_DATABASE);
 

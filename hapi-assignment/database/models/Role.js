@@ -8,11 +8,11 @@ var schema = {
         type: String,
         required: true,
     },
-    id: {
+    roleId: {
         type: Number,
         enum: [1,2],
         required: true
-    }
+    },
     createdOn: {
         type: Date,
         default: null
