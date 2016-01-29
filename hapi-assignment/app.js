@@ -11,6 +11,7 @@ server.connection({
 
 require("./database");
 require("./modules");
+require("./authentication");
 
 server.start(function() {
     console.log("Server running at: " + server.info.uri);

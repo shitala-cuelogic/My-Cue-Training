@@ -8,6 +8,10 @@ var schema = {
         type: String,
         required: true
     },
+    userAgent: {
+        type: String,
+        required: true
+    },
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: "Users"
@@ -23,7 +27,7 @@ var schema = {
 }
 
 var mongooseSchema = new mongoose.Schema(schema, {
-    collection: "Users"
+    collection: "UserActivity"
 });
 
 mongooseSchema.pre("save", function(next) {

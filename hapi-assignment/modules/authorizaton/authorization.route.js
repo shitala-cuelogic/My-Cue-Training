@@ -1,7 +1,10 @@
 var series = require("hapi-next"),
     validator = require("./authorization.validator"),
     controller = require("./authorization.controller"),
+    userHelper = require("../../helpers/user"),
     joi = require("joi");
+
+var security = require("../../utility/security");
 
 module.exports = {
 
@@ -22,8 +25,10 @@ module.exports = {
             handler: function(request, reply) {
 
                 var functionSeries = new series([
-                    validator.checkUserExist,
-                    controller.userSignup,
+                    userHelper.fetchUserDetails,
+                    validator.userExists,
+                    security.hashedPassword,
+                    controller.userSignup
                 ]);
 
                 functionSeries.execute(request, reply);
@@ -44,7 +49,14 @@ module.exports = {
             },
             handler: function(request, reply) {
 
-                var functionSeries = new series([]);
+                var functionSeries = new series([
+                    userHelper.fetchUserDetails,
+                    validator.userDoesNotExists,
+                    validator.comparePassword,
+                    controller.logUserActivity,
+                    security.createToken,
+                    controller.userLogin
+                ]);
 
                 functionSeries.execute(request, reply);
             }
