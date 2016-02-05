@@ -1,16 +1,19 @@
 "use strict"
 
 var promise = require("bluebird"),
-    mongoose = promise.promisifyAll(require("mongoose"));
+    mongoose = promise.promisifyAll(require("mongoose")),
+    moment = require("moment");
 
-var usersModel = mongoose.model("Users");
+var usersModel = mongoose.model("Users"),
+    userActivityModel = mongoose.model("UserActivity");
 
 var log = require("../../utility/log");
 
 
 module.exports = {
     fetchAllUserDetails: fetchAllUserDetails,
-    updateUserDetails: updateUserDetails
+    updateUserDetails: updateUserDetails,
+    fetchInactiveUsers: fetchInactiveUsers
 }
 
 function fetchAllUserDetails(request, reply) {
@@ -73,4 +76,69 @@ function updateUserDetails(request, reply) {
             log.write(err);
             reply.next(err);
         });
+}
+
+
+function fetchInactiveUsers(request, reply) {
+
+    log.write("modules > user > user.contoller.js > fetchInactiveUsers()");
+
+    var pocket = {};
+    pocket.fiveDaysBeforDate = moment.utc().subtract(process.env.Days_To_Find_Inactive_Users, 'days');
+
+    userActivityModel.aggregateAsync({
+            $group: {
+                _id: "$userId",
+                lastDate: {
+                    $max: "$createdOn"
+                }
+            }
+        }, {
+            $match: {
+                lastDate: {
+                    $lte: new Date(pocket.fiveDaysBeforDate)
+                }
+            }
+        })
+        .then(function(users) {
+
+            if (!users.length) {
+                reply.data = {
+                    message: "Inactive users not found."
+                }
+            } else {
+                reply.data = {
+                    users: users
+                }
+            }
+
+            reply.next()
+        })
+        .catch(function(err) {
+            log.write(err);
+            reply.data(err)
+        })
+
+
+    // userActivityModel.find()
+    //     .lean()
+    //     .execAsync()
+    //     .then(function(users) {
+
+    //         // if (!users.length) {
+    //         //     reply.data = {
+    //         //         message: "Inactive users not found."
+    //         //     }
+    //         // } else {
+    //         reply.data = {
+    //                 users: users
+    //             }
+    //             // }
+
+    //         reply.next()
+    //     })
+    //     .catch(function(err) {
+    //         log.write(err);
+    //         reply.data(err)
+    //     })
 }

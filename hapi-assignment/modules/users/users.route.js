@@ -76,6 +76,22 @@ module.exports = {
                 functionSeries.execute(request, reply);
             }
         }
+    },
+
+    fetchInactiveUsers: {
+        method: "GET",
+        path: "/inactive/users",
+        config: {
+            description: "Fetch users who did not login since last few days",
+            handler: function(request, reply) {
+
+                var functionSeries = new series([
+                     controller.fetchInactiveUsers
+                    ]);
+                functionSeries.execute(request, reply);
+            }
+
+        }
     }
 
 };
