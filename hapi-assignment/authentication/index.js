@@ -28,7 +28,6 @@ function jwtTokenAuthentication(server) {
 
                 security.verifyToken(request.headers.authorization)
                     .then(function(decoded) {
-
                         reply.continue({
                             credentials: decoded
                         });

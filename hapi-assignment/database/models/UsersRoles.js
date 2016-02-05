@@ -4,11 +4,11 @@ var mongoose = require("mongoose");
 
 var schema = {
 
-    name: {
+    type: {
         type: String,
         required: true,
     },
-    roleId: {
+    roleTypeId: {
         type: Number,
         enum: [1,2],
         required: true
@@ -23,7 +23,9 @@ var schema = {
     }
 }
 
-var mongooseSchema = new mongoose.Schema(schema);
+var mongooseSchema = new mongoose.Schema(schema, {
+    collection: "UsersRoles"
+});
 
 mongooseSchema.pre("save", function(next) {
 
@@ -50,7 +52,4 @@ mongooseSchema.pre("update", function() {
     });
 });
 
-
-mongoose.model("Roles", mongooseSchema);
-
-//module.exports = schema;
+mongoose.model("UsersRoles", mongooseSchema);

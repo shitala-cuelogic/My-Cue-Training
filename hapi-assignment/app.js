@@ -11,7 +11,8 @@ server.connection({
 
 require("./database");
 require("./modules");
-require("./authentication");
+require("./authentication"),
+require("./bootstrap/create-users-role");
 
 server.start(function() {
     console.log("Server running at: " + server.info.uri);

@@ -4,7 +4,11 @@ var mongoose = require("mongoose");
 
 var schema = {
 
-
+    type : {
+        type: String,
+        enum: ["admin", "user"],
+        default: "admin"
+    },
     username: {
         type: String,
         required: true,

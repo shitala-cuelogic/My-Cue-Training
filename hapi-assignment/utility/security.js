@@ -59,6 +59,7 @@ function createToken(request, reply) {
     tokenPayload = {
         _id: reply.data.user._id,
         username: reply.data.user.username,
+        scope: reply.data.user.type
     }
 
     keyToken = jwt.sign(tokenPayload, tokenSecret);

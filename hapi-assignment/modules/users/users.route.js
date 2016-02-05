@@ -11,7 +11,10 @@ module.exports = {
         method: "GET",
         path: "/get/user/{userId}",
         config: {
-            auth: "Basic",
+            auth: {
+                strategy: "Basic",
+                scope: ["user", "admin"]
+            },
             description: "Get user details",
             validate: {
                 params: {
@@ -34,7 +37,10 @@ module.exports = {
         method: "GET",
         path: "/get/all/users",
         config: {
-            auth: "Basic",
+            auth: {
+                strategy: "Basic",
+                scope: ["admin"]
+            },
             description: "Get all users details",
             handler: function(request, reply) {
 
@@ -52,7 +58,10 @@ module.exports = {
         method: "POST",
         path: "/update/user/{userId}",
         config: {
-            auth: "Basic",
+            auth: {
+                strategy: "Basic",
+                scope: ["user", "admin"]
+            },
             description: "Update user data",
             validate: {
                 params: {
